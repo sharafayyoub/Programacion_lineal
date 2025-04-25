@@ -20,7 +20,7 @@ class ArmyController:
         max_gold = self.gold.amount
 
         optimal_power = 0
-        optimal_solution = (0, 0)  # swordsmen, horsemen
+        optimal_solution = (0, 0, 0)  # swordsmen, bowmen (always 0), horsemen
 
         for swordsmen in range(max_food // self.swordsmen.food_cost + 1):
             for horsemen in range(max_food // self.horsemen.food_cost + 1):
@@ -36,9 +36,10 @@ class ArmyController:
                 if total_food <= max_food and total_wood <= max_wood and total_gold <= max_gold:
                     if total_power > optimal_power:
                         optimal_power = total_power
-                        optimal_solution = (swordsmen, horsemen)
+                        optimal_solution = (swordsmen, 0, horsemen)  # bowmen is always 0
 
         return optimal_power, optimal_solution
 
-    def save_solution(self, swordsmen, horsemen, power):
-        self.database.save_solution(swordsmen, 0, horsemen, power)
+    def save_solution(self, swordsmen, bowmen, horsemen, power):
+        # Guarda la solución en la base de datos
+        self.database.save_solution(swordsmen, bowmen, horsemen, power)

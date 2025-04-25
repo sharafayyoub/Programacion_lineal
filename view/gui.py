@@ -20,8 +20,11 @@ class ArmyApp:
         tk.Button(self.root, text="Calculate Optimal Army", command=self.calculate).pack(pady=10)
 
     def calculate(self):
+        # Calcula el ejército óptimo
         optimal_power, (swordsmen, bowmen, horsemen) = self.controller.calculate_optimal_army()
+        # Guarda la solución en la base de datos
         self.controller.save_solution(swordsmen, bowmen, horsemen, optimal_power)
+        # Muestra el resultado en la interfaz gráfica
         self.result_label.config(
             text=f"Optimal Power: {optimal_power}\n"
                  f"Swordsmen: {swordsmen}, Bowmen: {bowmen}, Horsemen: {horsemen}"
