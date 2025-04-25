@@ -1,8 +1,8 @@
-from controller import ArmyController
+from view.gui import ArmyApp
 
 def main():
-    controller = ArmyController()
-    controller.run()
+    app = ArmyApp()
+    app.run()
 
 if __name__ == "__main__":
     main()
