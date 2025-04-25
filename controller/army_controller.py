@@ -3,7 +3,7 @@ from model.resources.wood import Wood
 from model.resources.gold import Gold
 from model.units.swordsmen import Swordsmen
 from model.units.horsemen import Horsemen
-from model.database import Database
+from model.database_handler import save_solution
 
 class ArmyController:
     def __init__(self):
@@ -12,7 +12,6 @@ class ArmyController:
         self.gold = Gold(600)
         self.swordsmen = Swordsmen()
         self.horsemen = Horsemen()
-        self.database = Database()
 
     def calculate_optimal_army(self):
         max_food = self.food.amount
@@ -41,5 +40,5 @@ class ArmyController:
         return optimal_power, optimal_solution
 
     def save_solution(self, swordsmen, bowmen, horsemen, power):
-        # Guarda la solución en la base de datos
-        self.database.save_solution(swordsmen, bowmen, horsemen, power)
+        # Guarda la solución usando SQLAlchemy
+        save_solution(swordsmen, bowmen, horsemen, power)
