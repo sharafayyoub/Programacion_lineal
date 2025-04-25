@@ -2,7 +2,6 @@ from model.resources.food import Food
 from model.resources.wood import Wood
 from model.resources.gold import Gold
 from model.units.swordsmen import Swordsmen
-from model.units.bowmen import Bowmen
 from model.units.horsemen import Horsemen
 from model.database import Database
 
@@ -12,7 +11,6 @@ class ArmyController:
         self.wood = Wood(800)
         self.gold = Gold(600)
         self.swordsmen = Swordsmen()
-        self.bowmen = Bowmen()
         self.horsemen = Horsemen()
         self.database = Database()
 
@@ -22,30 +20,25 @@ class ArmyController:
         max_gold = self.gold.amount
 
         optimal_power = 0
-        optimal_solution = (0, 0, 0)
+        optimal_solution = (0, 0)  # swordsmen, horsemen
 
         for swordsmen in range(max_food // self.swordsmen.food_cost + 1):
-            for bowmen in range(max_food // self.bowmen.food_cost + 1):
-                for horsemen in range(max_food // self.horsemen.food_cost + 1):
-                    total_food = (swordsmen * self.swordsmen.food_cost +
-                                  bowmen * self.bowmen.food_cost +
-                                  horsemen * self.horsemen.food_cost)
-                    total_wood = (swordsmen * self.swordsmen.wood_cost +
-                                  bowmen * self.bowmen.wood_cost +
-                                  horsemen * self.horsemen.wood_cost)
-                    total_gold = (swordsmen * self.swordsmen.gold_cost +
-                                  bowmen * self.bowmen.gold_cost +
-                                  horsemen * self.horsemen.gold_cost)
-                    total_power = (swordsmen * self.swordsmen.power +
-                                   bowmen * self.bowmen.power +
-                                   horsemen * self.horsemen.power)
+            for horsemen in range(max_food // self.horsemen.food_cost + 1):
+                total_food = (swordsmen * self.swordsmen.food_cost +
+                              horsemen * self.horsemen.food_cost)
+                total_wood = (swordsmen * self.swordsmen.wood_cost +
+                              horsemen * self.horsemen.wood_cost)
+                total_gold = (swordsmen * self.swordsmen.gold_cost +
+                              horsemen * self.horsemen.gold_cost)
+                total_power = (swordsmen * self.swordsmen.power +
+                               horsemen * self.horsemen.power)
 
-                    if total_food <= max_food and total_wood <= max_wood and total_gold <= max_gold:
-                        if total_power > optimal_power:
-                            optimal_power = total_power
-                            optimal_solution = (swordsmen, bowmen, horsemen)
+                if total_food <= max_food and total_wood <= max_wood and total_gold <= max_gold:
+                    if total_power > optimal_power:
+                        optimal_power = total_power
+                        optimal_solution = (swordsmen, horsemen)
 
         return optimal_power, optimal_solution
 
-    def save_solution(self, swordsmen, bowmen, horsemen, power):
-        self.database.save_solution(swordsmen, bowmen, horsemen, power)
+    def save_solution(self, swordsmen, horsemen, power):
+        self.database.save_solution(swordsmen, 0, horsemen, power)
